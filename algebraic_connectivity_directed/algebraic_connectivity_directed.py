@@ -144,6 +144,7 @@ def algebraic_connectivity_directed_variants(G, k=1):
         w = np.zeros(n)
         Gdict = {a: b for b, a in enumerate(G.nodes())}
         eta = np.Inf
+        flag = False
         for scc in nx.strongly_connected_components(G):
             scct = list(scc)
             nt = len(scct)
@@ -156,6 +157,12 @@ def algebraic_connectivity_directed_variants(G, k=1):
             Bi = L[scindex, :][:, scindex]
             Lsum = np.asarray(Bi.sum(axis=1)).flatten()
             alpha = 1 if math.isclose(0, max(np.abs(Lsum))) else 0
+            if alpha == 1:
+                if flag:  # reversal of graph does not contain a spanning directed tree
+                    eta = 0
+                    break
+                else:
+                    flag = True
             if nt == 1:
                 if alpha == 0:
                     a = np.asarray(Bi).flatten()[0][0, 0]
@@ -399,6 +406,16 @@ def run_tests():
         0.660608870771608, algebraic_connectivity_directed_variants(G1, 4)
     )
     assert math.isclose(0.83812, compute_mu_directed(G1, G2, G3), rel_tol=1e-4)
+
+    # disconnected graph
+    G = nx.from_numpy_matrix(
+        np.array([[0, 1, 0], [0, 0, 0], [0, 0, 0]]), create_using=nx.DiGraph
+    )
+    assert math.isclose(
+        -0.07735026918962568, algebraic_connectivity_directed_variants(G, 1)
+    )
+    assert math.isclose(0, compute_mu_directed(G), abs_tol=1e-9)
+    assert math.isclose(0, algebraic_connectivity_directed_variants(G, 4), abs_tol=1e-9)
 
 
 def main():
