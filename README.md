@@ -36,7 +36,7 @@ The graph G is a `networkx` DiGraph object.
 
 a<sub>1</sub> is the same as the value returned by algebraic_connectivity_directed(G)[0] (see Ref. [2]).
     
-a<sub>2</sub> is the same as $\tilde{a}$ as described in Ref. [3].
+a<sub>2</sub> is the same as &#227; as described in Ref. [3].
 
 a<sub>3</sub> is described in the proof of Theorem 21 in Ref. [3].
 

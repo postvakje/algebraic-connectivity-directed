@@ -152,7 +152,6 @@ def algebraic_connectivity_directed_variants(G, k=1):
             c = (1,) + (0,) * (nt - 2)
             C = sp.linalg.toeplitz(c, r)
             Q = sp.sparse.csr_matrix(scipy.linalg.orth(C.T))
-            I = sp.sparse.eye(nt)
             scindex = [Gdict[i] for i in scct]
             Bi = L[scindex, :][:, scindex]
             Lsum = np.asarray(Bi.sum(axis=1)).flatten()
@@ -178,8 +177,8 @@ def algebraic_connectivity_directed_variants(G, k=1):
                     Mi = 0.5 * Q.T @ (Wi @ Bi + Bi.T @ Wi) @ Q
                 else:
                     Ui = Wi
-                    Ui = 0.5 * I @ (Ui + Ui.T) @ I
-                    Mi = 0.5 * I @ (Wi @ Bi + Bi.T @ Wi) @ I
+                    Ui = 0.5 * (Ui + Ui.T)
+                    Mi = 0.5 * (Wi @ Bi + Bi.T @ Wi)
                 if nt <= 3:
                     if sp.sparse.isspmatrix(Mi):
                         Mi = Mi.todense()
@@ -405,6 +404,7 @@ def run_tests():
     assert math.isclose(
         0.660608870771608, algebraic_connectivity_directed_variants(G1, 4)
     )
+    assert math.isclose(0.852100963583309, compute_mu_directed(G1))
     assert math.isclose(0.83812, compute_mu_directed(G1, G2, G3), rel_tol=1e-4)
 
     # disconnected graph
