@@ -42,9 +42,9 @@ a<sub>3</sub> is described in the proof of Theorem 21 in Ref. [3].
 
 a<sub>4</sub> is equal to $\eta$ as described in Ref. [4].
 
-If the reversal of the graph does not contain a spanning directed tree, then a<sub>2</sub> <= 0.
+If the reversal of the graph does not contain a spanning directed tree, then a<sub>2</sub> ≤ 0.
 
-If G is strongly connected then a<sub>3</sub> >= a<sub>2</sub> > 0.
+If G is strongly connected then a<sub>3</sub> ≥ a<sub>2</sub> > 0.
 
 a<sub>4</sub> > 0 if and only if the reversal of the graph contains a spanning directed tree.
 
