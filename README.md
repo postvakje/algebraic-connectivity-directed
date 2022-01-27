@@ -10,7 +10,7 @@ Requires `python` >= 3.5 and packages `numpy`, `scipy`, `networkx` and `cvxpy`.
 `pip install algebraic-connectivity-directed`
 
 ## Usage
-After installation, run `from algebraic_connectivity_directed.algebraic_connectivity_directed import *`
+After installation, run `from algebraic_connectivity_directed import *`
 
 There are 3 main functions:
 
@@ -52,7 +52,7 @@ a<sub>4</sub> > 0 if and only if the reversal of the graph contains a spanning d
 
 Cycle graph
 ``` 
-from algebraic_connectivity_directed.algebraic_connectivity_directed import *
+from algebraic_connectivity_directed import *
 import networkx as nx
 import numpy as np
 G = nx.cycle_graph(10,create_using=nx.DiGraph)
@@ -81,8 +81,8 @@ print(compute_mu_directed(G1,G2,G3))
 ```
 ## References
 1. C. W. Wu, "Synchronization in coupled arrays of chaotic oscillators 
-with nonreciprocal coupling.", IEEE Transactions on Circuits and Systems–I, vol. 50,
-no. 2, pp. 294–297, 2003.
+with nonreciprocal coupling", IEEE Transactions on Circuits and Systems-I, vol. 50,
+no. 2, pp. 294-297, 2003.
 
 2. C. W. Wu, "Algebraic connecivity of directed graphs", 
     Linear and Multilinear Algebra, vol. 53, no. 3, pp. 203-223, 2005.
