@@ -28,6 +28,11 @@ def algebraic_connectivity_directed(G):
     input: networkx graph G
     returns: a(G), b(G), M = Q'*(L+L')*Q/2
     """
+
+    n = len(G.nodes)
+    if n <= 1:
+        """Graph is trivial or empty. Corresponds to complete graph."""
+        return n, n, None
     L = nx.laplacian_matrix.__wrapped__(G)
     n, m = L.shape
     r = (1, -1) + (0,) * (n - 2)
@@ -96,6 +101,10 @@ def algebraic_connectivity_directed_variants(G, k=1):
     """
     if k == 1:
         return algebraic_connectivity_directed(G)[0]
+    n = len(G.nodes)
+    if n <= 1:
+        """Graph is trivial or empty. Corresponds to complete graph."""
+        return n
     L = nx.laplacian_matrix.__wrapped__(G)
     n, m = L.shape
     if k >= 2:
@@ -225,6 +234,14 @@ def compute_mu_directed(*Graphs):
 
     """
     G = Graphs[0]
+    n = len(G.nodes)
+    if n <= 1:
+        """Graph is trivial or empty. Corresponds to complete graph."""
+        for Gi in Graphs[1:]:
+            ni = len(Gi.nodes)
+            if ni != n:
+                raise ValueError("Graphs are not of the same order.")
+        return n
     L = nx.laplacian_matrix.__wrapped__(G)
     n, m = L.shape
     r = (1, -1) + (0,) * (n - 2)
@@ -416,6 +433,27 @@ def run_tests():
     )
     assert math.isclose(0, compute_mu_directed(G), abs_tol=1e-9)
     assert math.isclose(0, algebraic_connectivity_directed_variants(G, 4), abs_tol=1e-9)
+
+    # empty graph
+    G = nx.DiGraph()
+    assert math.isclose(0, compute_mu_directed(G, G), abs_tol=1e-9)
+    for i in range(1, 5):
+        assert math.isclose(
+            0, algebraic_connectivity_directed_variants(G, i), abs_tol=1e-9
+        )
+
+    # trivial graph
+    G = nx.trivial_graph(create_using=nx.DiGraph)
+    assert math.isclose(1, compute_mu_directed(G, G))
+    for i in range(1, 5):
+        assert math.isclose(1, algebraic_connectivity_directed_variants(G, i))
+
+    # complete graphs
+    for i in range(2, 10):
+        G = nx.complete_graph(i, create_using=nx.DiGraph)
+        assert math.isclose(i, compute_mu_directed(G))
+        for j in range(1, 5):
+            assert math.isclose(i, algebraic_connectivity_directed_variants(G, j))
 
 
 def main():
