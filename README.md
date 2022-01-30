@@ -54,9 +54,11 @@ a<sub>4</sub> is equal to &eta; as described in Ref. [4].
 
 3. a<sub>4</sub> > 0 if and only if the reversal of the graph contains a spanning directed tree.
 
-4. a<sub>1</sub>&le;&#956;&le;&#956;<sub>2</sub>.
+4. a<sub>1</sub> &le; &#956; &le; &#956;<sub>2</sub>.
 
-5. &#956;=&#956;<sub>2</sub>=1 if the reversal of the graph is a directed tree (arborescence).
+5. &#956; = &#956;<sub>2</sub> = 1 if the reversal of the graph is a directed tree (arborescence).
+
+6. If the Laplacian matrix L is a normal matrix, then a<sub>1</sub> = &#956; = &#956;<sub>2</sub>.
 
 ## Examples
 

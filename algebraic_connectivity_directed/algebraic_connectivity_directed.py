@@ -268,9 +268,14 @@ def compute_mu_directed(*Graphs):
             if ni != n:
                 raise ValueError("Graphs are not of the same order.")
         return n
-    if nx.algorithms.tree.recognition.is_arborescence(G.reverse()):
-        return compute_mu2_directed(G)
     L = nx.laplacian_matrix.__wrapped__(G)
+    if len(Graphs) == 1:
+        if nx.algorithms.tree.recognition.is_arborescence(G.reverse()):
+            return compute_mu2_directed(G)
+        if np.allclose(
+            (L @ L.T).toarray(), (L.T @ L).toarray()
+        ):  # Laplacian matrix is normal
+            return compute_mu2_directed(G)
     n, m = L.shape
     r = (1, -1) + (0,) * (n - 2)
     c = (1,) + (0,) * (n - 2)

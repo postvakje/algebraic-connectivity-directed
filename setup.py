@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 setup(
    name='algebraic-connectivity-directed',
    python_requires='>= 3.5',
-   version='0.0.9',
+   version='0.0.10',
    author='Chai Wah Wu',
    author_email='cwwuieee@gmail.com',
    packages=find_packages(),
