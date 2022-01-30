@@ -207,12 +207,38 @@ def algebraic_connectivity_directed_variants(G, k=1):
     return a
 
 
+def compute_mu2_directed(G):
+    """
+    returns mu2(G) defined as the eigenvalue lambda with minimal real part where lambda ranges all eigenvalues
+    of L not corresponding to the all 1's vector e. L is the Laplacian matrix
+    of graph G. mu2(G) is the upper bound used in the computation of mu(G).
+
+    References:
+    1. C. W. Wu, "On a matrix inequality and its application to the synchronization in coupled chaotic systems,"
+    Complex Computing-Networks: Brain-like and Wave-oriented Electrodynamic Algorithms,
+    Springer Proceedings in Physics, vol. 104, pp. 279-288, 2006.
+
+    input: networkx graph G
+    returns: mu2(G)
+
+    """
+    n = len(G.nodes)
+    if n <= 1:
+        """Graph is trivial or empty."""
+        raise ValueError("Graph has less that 2 nodes.")
+    L = nx.laplacian_matrix.__wrapped__(G)
+    n, m = L.shape
+    return sorted(np.real(sp.linalg.eig(L.astype(np.float64).toarray(), right=False)))[
+        1
+    ]
+
+
 def compute_mu_directed(*Graphs):
     """
     returns mu(G) defined as the supremum of numbers mu such that
     U(L-mu*I)+(L'-mu*I)U is positive semidefinite for some symmetric zero row sums
     real matrix U with nonpositive off-diagonal elements where L is the Laplacian matrix
-    of graph G.
+    of graph G. Computed number may be smaller than the defined value due to the difficulty of the SDP problem.
 
     References:
     1. C. W. Wu, "Synchronization in coupled arrays of chaotic oscillators
@@ -252,18 +278,7 @@ def compute_mu_directed(*Graphs):
     I = sp.sparse.eye(n)
     I2 = sp.sparse.eye(n - 1)
     e = np.ones((n, 1))
-    if n <= 3:
-        ub = sorted(
-            np.real(sp.linalg.eig(L.astype(np.float64).toarray(), right=False))
-        )[1]
-    else:
-        ub = sorted(
-            np.real(
-                sp.sparse.linalg.eigs(
-                    L.astype(np.float64), k=2, which="SR", return_eigenvectors=False
-                )
-            )
-        )[1]
+    ub = compute_mu2_directed(G)
     lb = algebraic_connectivity_directed(G)[0]
     constraints = [U @ e == 0]
     constraints += [U - cp.diag(cp.diag(U)) <= 0]
@@ -275,27 +290,7 @@ def compute_mu_directed(*Graphs):
         ni, mi = Li.shape
         if ni != n or mi != m:
             raise ValueError("Graphs are not of the same order.")
-        if n <= 3:
-            ub = min(
-                ub,
-                sorted(
-                    np.real(sp.linalg.eig(Li.astype(np.float64).toarray(), right=False))
-                )[1],
-            )
-        else:
-            ub = min(
-                ub,
-                sorted(
-                    np.real(
-                        sp.sparse.linalg.eigs(
-                            Li.astype(np.float64),
-                            k=2,
-                            which="SR",
-                            return_eigenvectors=False,
-                        )
-                    )
-                )[1],
-            )
+        ub = min(ub, compute_mu2_directed(Gi))
         lb = min(lb, algebraic_connectivity_directed(Gi)[0])
     mu = ub
     while np.abs(ub - lb) > 1e-9:
@@ -304,7 +299,7 @@ def compute_mu_directed(*Graphs):
         newconstraints += [U @ (L - mu * I) >> 0]
         for Li in Llist:
             newconstraints += [U @ (Li - mu * I) >> 0]
-        prob = cp.Problem(cp.Minimize(0), constraints=newconstraints)
+        prob = cp.Problem(cp.Minimize(None), constraints=newconstraints)
         prob.solve()
         if prob.status not in ["infeasible", "unbounded"]:
             lb = mu
@@ -378,7 +373,7 @@ def run_tests():
     G.add_edge(4, 6)
     G.add_edge(5, 6)
     G.add_edge(6, 5)
-    assert math.isclose(0.1206147578199189, compute_mu_directed(G))
+    assert math.isclose(0.120614757819919, compute_mu_directed(G))
     assert math.isclose(-0.0426650385846, algebraic_connectivity_directed(G)[0])
     assert math.isclose(
         0.119049451961957, algebraic_connectivity_directed_variants(G, 4)
@@ -454,6 +449,11 @@ def run_tests():
         assert math.isclose(i, compute_mu_directed(G))
         for j in range(1, 5):
             assert math.isclose(i, algebraic_connectivity_directed_variants(G, j))
+
+    # directed trees
+    for n in range(2, 10):
+        G = nx.random_tree(n, create_using=nx.DiGraph)
+        assert math.isclose(1, compute_mu2_directed(G.reverse()))
 
 
 def main():

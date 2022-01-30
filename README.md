@@ -12,26 +12,30 @@ Requires `python` >= 3.5 and packages `numpy`, `scipy`, `networkx` and `cvxpy`.
 ## Usage
 After installation, run `from algebraic_connectivity_directed import *`
 
-There are 3 main functions:
+There are 4 main functions:
 
 1. Function `algebraic_connectivity_directed`: algebraic_connectivity_directed(G) returns `a, b, M` where `a` is the algebraic connectivity of the digraph G. The graph G is a `networkx` DiGraph object. The definitions of `a, b, M = Q'*(L+L')*Q/2` can be found in Ref. [2].
 
 2. Function `algebraic_connectivity_directed_variants`: algebraic_connectivity_directed_variants(G,k) returns variations of algebraic connectivity of the digraph G.
-The graph `G` is a `networkx` DiGraph object. Setting `k = 1, 2, 3, 4` returns a<sub>1</sub>, a<sub>2</sub>, a<sub>3</sub>, a<sub>4</sub> as defined in Ref. [5]. 
+The graph `G` is a `networkx` DiGraph object. Setting `k = 1, 2, 3, 4` returns a<sub>1</sub>, a<sub>2</sub>, a<sub>3</sub>, a<sub>4</sub> as defined in Ref. [6]. 
 
 3. Function `compute_mu_directed`:
 compute_mu_directed(G)
 returns `mu(G)` defined as the supremum of numbers &mu; such that 
 U(L-&mu;\*I)+(L'-&mu;\*I)U is positive semidefinite for some symmetric zero row sums
 real matrix `U` with nonpositive off-diagonal elements where `L` is the Laplacian matrix
-of graph `G` (see Ref. [1]).
+of graph `G` (see Ref. [1]). Computed number may be smaller than the defined value due to the difficulty of the SDP problem.
+
+4. Function `compute_mu2_directed`:
+compute_mu2_directed(G)
+returns `mu2(G)` defined as the eigenvalue with the smallest real part among eigenvalues of the Laplacian matrix `L` that do not belong to the all 1's vector `e` (see Ref. [5]).
 
 `compute_mu_directed` accepts multiple arguments. If the input are multiple graphs G<sub>1</sub>, G<sub>2</sub>, G<sub>3</sub>, ... with L<sub>i</sub> the Laplacian matrix of G<sub>i</sub>, 
 and all G<sub>i</sub> have the same number of nodes,
 then compute_mu_directed(G<sub>1</sub>, G<sub>2</sub>, G<sub>3</sub>, ...) returns the supremum of &mu; such that there 
 exist some symmetric zero row sums real matrix U with nonpositive off-diagonal elements 
 where for all i, U(L<sub>i</sub>-&mu;\*I)+(L<sub>i</sub> '-&mu;\*I)U is positive semidefinite. This is useful in analyzing
-synchronization of networked systems where systems are coupled via multiple networks. See Ref. [6].
+synchronization of networked systems where systems are coupled via multiple networks. See Ref. [7].
 The graph G is a `networkx` DiGraph object.
 
 a<sub>1</sub> is the same as the value returned by algebraic_connectivity_directed(G)[0] (see Ref. [2]).
@@ -42,11 +46,17 @@ a<sub>3</sub> is described in the proof of Theorem 21 in Ref. [3].
 
 a<sub>4</sub> is equal to &eta; as described in Ref. [4].
 
-If the reversal of the graph does not contain a spanning directed tree, then a<sub>2</sub> &le; 0.
+### Properties
 
-If G is strongly connected then a<sub>3</sub> &ge; a<sub>2</sub> > 0.
+1. If the reversal of the graph does not contain a spanning directed tree, then a<sub>2</sub> &le; 0.
 
-a<sub>4</sub> > 0 if and only if the reversal of the graph contains a spanning directed tree.
+2. If G is strongly connected then a<sub>3</sub> &ge; a<sub>2</sub> > 0.
+
+3. a<sub>4</sub> > 0 if and only if the reversal of the graph contains a spanning directed tree.
+
+4. a<sub>1</sub>&le;&#956;&le;&#956;<sub>2</sub>.
+
+5. &#956;=&#956;<sub>2</sub>=1 if the reversal of the graph is a directed tree.
 
 ## Examples
 
@@ -93,7 +103,10 @@ no. 2, pp. 294-297, 2003.
 4. C. W. Wu, "Synchronization in networks of nonlinear dynamical systems coupled via a directed graph", 
     Nonlinearity, vol. 18, pp. 1057-1064, 2005.
 
-5. C. W. Wu, "Synchronization in Complex Networks of Nonlinear Dynamical Systems", World Scientific, 2007.
+5.  C. W. Wu, "On a matrix inequality and its application to the synchronization in coupled chaotic systems," Complex Computing-Networks: Brain-like and Wave-oriented Electrodynamic Algorithms, Springer Proceedings in Physics, vol. 104, pp. 279-288, 2006.
 
-6. C. W. Wu, "Synchronization in dynamical systems coupled via multiple directed networks," 
+6. C. W. Wu, "Synchronization in Complex Networks of Nonlinear Dynamical Systems", World Scientific, 2007.
+
+7. C. W. Wu, "Synchronization in dynamical systems coupled via multiple directed networks," 
 IEEE Transactions on Circuits and Systems-II: Express Briefs, vol. 68, no. 5, pp. 1660-1664, 2021.
+
