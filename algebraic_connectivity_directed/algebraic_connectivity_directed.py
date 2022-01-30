@@ -268,6 +268,8 @@ def compute_mu_directed(*Graphs):
             if ni != n:
                 raise ValueError("Graphs are not of the same order.")
         return n
+    if nx.algorithms.tree.recognition.is_arborescence(G.reverse()):
+        return compute_mu2_directed(G)
     L = nx.laplacian_matrix.__wrapped__(G)
     n, m = L.shape
     r = (1, -1) + (0,) * (n - 2)
@@ -329,6 +331,7 @@ def run_tests():
     for n in range(2, 16):
         G = nx.path_graph(n, create_using=nx.DiGraph)
         assert math.isclose(1, algebraic_connectivity_directed_variants(G, 4))
+        assert math.isclose(1, compute_mu_directed(G))
 
     # exploding star graphs
     for n in range(3, 16):
@@ -454,6 +457,7 @@ def run_tests():
     for n in range(2, 10):
         G = nx.random_tree(n, create_using=nx.DiGraph)
         assert math.isclose(1, compute_mu2_directed(G.reverse()))
+        assert math.isclose(1, compute_mu_directed(G.reverse()))
 
 
 def main():

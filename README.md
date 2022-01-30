@@ -56,7 +56,7 @@ a<sub>4</sub> is equal to &eta; as described in Ref. [4].
 
 4. a<sub>1</sub>&le;&#956;&le;&#956;<sub>2</sub>.
 
-5. &#956;=&#956;<sub>2</sub>=1 if the reversal of the graph is a directed tree.
+5. &#956;=&#956;<sub>2</sub>=1 if the reversal of the graph is a directed tree (arborescence).
 
 ## Examples
 
