@@ -46,19 +46,25 @@ a<sub>3</sub> is described in the proof of Theorem 21 in Ref. [3].
 
 a<sub>4</sub> is equal to &eta; as described in Ref. [4].
 
+We define directed tree in the sense of an [arborescence](https://en.wikipedia.org/wiki/Arborescence_(graph_theory)) (see Ref. [2]).
+
 ### Properties
 
-1. If the reversal of the graph does not contain a spanning directed tree, then a<sub>2</sub> &le; 0.
+1. If a<sub>1</sub> > 0, then G is connected and the reversal of G contains a spanning directed tree.
 
-2. If G is strongly connected then a<sub>3</sub> &ge; a<sub>2</sub> > 0.
+2. If G is balanced, then a<sub>1</sub> &ge; 0 and a<sub>1</sub> > 0 &#8660; G is connected &#8660; G is strongly connected.
 
-3. a<sub>4</sub> > 0 if and only if the reversal of the graph contains a spanning directed tree.
+3. If a<sub>2</sub> > 0, then G is connected and the reversal of G contains a spanning directed tree.
 
-4. a<sub>1</sub> &le; &#956; &le; &#956;<sub>2</sub>.
+4. If G is strongly connected then a<sub>3</sub> &ge; a<sub>2</sub> > 0.
 
-5. &#956; = &#956;<sub>2</sub> = 1 if the reversal of the graph is a directed tree (arborescence).
+5. a<sub>4</sub> > 0 if and only if the reversal of the graph contains a spanning directed tree.
 
-6. If the Laplacian matrix L is a normal matrix, then a<sub>1</sub> = &#956; = &#956;<sub>2</sub>.
+6. a<sub>1</sub> &le; &#956; &le; &#956;<sub>2</sub>.
+
+7. &#956; = &#956;<sub>2</sub> = 1 if the reversal of the graph is a directed tree.
+
+8. If the Laplacian matrix L is a normal matrix, then a<sub>1</sub> = &#956; = &#956;<sub>2</sub> and G is connected &#8660; G is strongly connected.
 
 ## Examples
 
